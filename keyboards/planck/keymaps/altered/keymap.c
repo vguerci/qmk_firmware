@@ -45,68 +45,35 @@ enum planck_layers {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
-// Tap Dance Declarations
+// Tap Dance
 enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC };
 
-void dance_cmd_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code(KC_LGUI);
-  } else {
-    register_code(KC_LGUI);
-    register_code(KC_ESC);
+#define TD_CHORD_ESC(name, key)                                                    \
+  void chord_esc_##name##_finished(qk_tap_dance_state_t *state, void *user_data) { \
+    if (state->count == 1) {                                                       \
+      register_code(key);                                                          \
+    } else {                                                                       \
+      register_code(key);                                                          \
+      register_code(KC_ESC);                                                       \
+    }                                                                              \
+  }                                                                                \
+  void chord_esc_##name##_reset(qk_tap_dance_state_t *state, void *user_data) {    \
+    if (state->count == 1) {                                                       \
+      unregister_code(key);                                                        \
+    } else {                                                                       \
+      unregister_code(key);                                                        \
+      unregister_code(KC_ESC);                                                     \
+    }                                                                              \
   }
-}
 
-void dance_cmd_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code(KC_LGUI);
-  } else {
-    unregister_code(KC_LGUI);
-    unregister_code(KC_ESC);
-  }
-}
+TD_CHORD_ESC(cmd, KC_LGUI)
+TD_CHORD_ESC(opt, KC_LALT)
+TD_CHORD_ESC(ctrl, KC_LCTRL)
 
-void dance_opt_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code(KC_LALT);
-  } else {
-    register_code(KC_LALT);
-    register_code(KC_ESC);
-  }
-}
-
-void dance_opt_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code(KC_LALT);
-  } else {
-    unregister_code(KC_LALT);
-    unregister_code(KC_ESC);
-  }
-}
-
-void dance_ctr_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code(KC_LCTRL);
-  } else {
-    register_code(KC_LCTRL);
-    register_code(KC_ESC);
-  }
-}
-
-void dance_ctr_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code(KC_LCTRL);
-  } else {
-    unregister_code(KC_LCTRL);
-    unregister_code(KC_ESC);
-  }
-}
-
-// Tap Dance Definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_cmd_esc_finished, dance_cmd_esc_reset),
-    [TD_OPT_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_opt_esc_finished, dance_opt_esc_reset),
-    [TD_CTR_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_ctr_esc_finished, dance_ctr_esc_reset)
+    [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_cmd_finished, chord_esc_cmd_reset),
+    [TD_OPT_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_opt_finished, chord_esc_opt_reset),
+    [TD_CTR_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_ctrl_finished, chord_esc_ctrl_reset)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
