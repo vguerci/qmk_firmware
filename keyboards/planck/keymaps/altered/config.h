@@ -14,3 +14,5 @@
 */
 #define ORYX_CONFIGURATOR
 #define NO_AUTO_SHIFT_ALPHA
+
+#define TAPPING_TERM 200
