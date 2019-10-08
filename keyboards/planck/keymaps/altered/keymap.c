@@ -45,12 +45,76 @@ enum planck_layers {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
+// Tap Dance Declarations
+enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC };
+
+void dance_cmd_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code(KC_LGUI);
+  } else {
+    register_code(KC_LGUI);
+    register_code(KC_ESC);
+  }
+}
+
+void dance_cmd_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code(KC_LGUI);
+  } else {
+    unregister_code(KC_LGUI);
+    unregister_code(KC_ESC);
+  }
+}
+
+void dance_opt_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code(KC_LALT);
+  } else {
+    register_code(KC_LALT);
+    register_code(KC_ESC);
+  }
+}
+
+void dance_opt_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code(KC_LALT);
+  } else {
+    unregister_code(KC_LALT);
+    unregister_code(KC_ESC);
+  }
+}
+
+void dance_ctr_esc_finished(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code(KC_LCTRL);
+  } else {
+    register_code(KC_LCTRL);
+    register_code(KC_ESC);
+  }
+}
+
+void dance_ctr_esc_reset(qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code(KC_LCTRL);
+  } else {
+    unregister_code(KC_LCTRL);
+    unregister_code(KC_ESC);
+  }
+}
+
+// Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_cmd_esc_finished, dance_cmd_esc_reset),
+    [TD_OPT_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_opt_esc_finished, dance_opt_esc_reset),
+    [TD_CTR_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_ctr_esc_finished, dance_ctr_esc_reset)
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
       LCTL_T(KC_TAB),KC_Q,KC_W,KC_E,KC_R,KC_T,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_BSPACE,
       LGUI_T(KC_ESCAPE),KC_A,KC_S,KC_D,KC_F,KC_G,KC_H,KC_J,KC_K,KC_L,KC_SCOLON,KC_QUOTE,
       KC_LSHIFT,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_N,KC_M,KC_COMMA,KC_DOT,KC_SLASH,RSFT_T(KC_ENTER),
-      MO(4),KC_LCTRL,KC_LALT,KC_LGUI,LOWER,KC_SPACE,KC_NO,RAISE,KC_LEFT,KC_DOWN,KC_UP,KC_RIGHT
+      MO(4),TD(TD_CTR_ESC),TD(TD_OPT_ESC),TD(TD_CMD_ESC),LOWER,KC_SPACE,KC_NO,RAISE,KC_LEFT,KC_DOWN,KC_UP,KC_RIGHT
   ),
 
   [_RAISE] = LAYOUT_planck_grid(
