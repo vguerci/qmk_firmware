@@ -26,9 +26,6 @@
 #define ES_GRTR_MAC LSFT(KC_GRAVE)
 #define ES_BSLS_MAC ALGR(KC_6)
 
-enum planck_keycodes {
-  RGB_SLD = EZ_SAFE_RANGE,
-};
 
 enum planck_layers {
   _BASE,
@@ -38,9 +35,14 @@ enum planck_layers {
   _LAYER4,
 };
 
-
-#define LOWER MO(_LOWER)
-#define RAISE MO(_RAISE)
+enum planck_keycodes {
+  QWERTY = SAFE_RANGE,
+  COLEMAK,
+  DVORAK,
+  PLOVER,
+  BACKLIT,
+  EXT_PLV
+};
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
