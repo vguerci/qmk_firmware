@@ -92,8 +92,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define XX_UND TD(TD_DBL_UND)
 #define XX_BRK TD(TD_DBL_BRK)
 #define XX_CRL TD(TD_DBL_CRL)
-#define XX_SQO TD(TD_DBL_SQO)
-#define XX_BTK TD(TD_DBL_BTK)
+#define XX_SQO TD(TD_DBL_SQO) //issue with shift, sends shift+left
+#define XX_BTK TD(TD_DBL_BTK) //issue with shift, sends shift+left
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_5x15(
