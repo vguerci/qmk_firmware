@@ -43,7 +43,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 #define TD_MACRO_DOUBLE(name, key, macro)                                             \
   void double_macro_##name##_finished(qk_tap_dance_state_t *state, void *user_data) { \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) register_code(KC_LSHIFT);                             \
+      if (key & QK_LSFT) register_code(KC_LSHIFT);                                    \
       register_code((uint8_t)key);                                                    \
     } else {                                                                          \
       SEND_STRING(macro);                                                             \
@@ -52,7 +52,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
   }                                                                                   \
   void double_macro_##name##_reset(qk_tap_dance_state_t *state, void *user_data) {    \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                           \
+      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                                  \
       unregister_code((uint8_t)key);                                                  \
     }                                                                                 \
   }
@@ -60,13 +60,14 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 TD_MACRO_DOUBLE(par, KC_LEFT_PAREN, "()"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(brk, KC_LBRACKET, "[]"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(crl, KC_LEFT_CURLY_BRACE, "{}"SS_TAP(X_LEFT))
+TD_MACRO_DOUBLE(sqo, KC_QUOTE, "''"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(und, KC_UNDERSCORE, "__"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(str, KC_ASTERISK, "**"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(btk, KC_GRAVE, "``"SS_TAP(X_LEFT))
 
 //Tap dance Actions
 
-enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DBL_PAR, TD_DBL_BRK, TD_DBL_CRL, TD_DBL_UND, TD_DBL_STR, TD_DBL_BTK };
+enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DBL_PAR, TD_DBL_BRK, TD_DBL_CRL, TD_DBL_SQO, TD_DBL_UND, TD_DBL_STR, TD_DBL_BTK };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_cmd_finished, chord_esc_cmd_reset),
@@ -75,6 +76,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_DBL_PAR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_par_finished, double_macro_par_reset),
     [TD_DBL_BRK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_brk_finished, double_macro_brk_reset),
     [TD_DBL_CRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_crl_finished, double_macro_crl_reset),
+    [TD_DBL_SQO] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_sqo_finished, double_macro_sqo_reset),
     [TD_DBL_UND] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_und_finished, double_macro_und_reset),
     [TD_DBL_STR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_str_finished, double_macro_str_reset),
     [TD_DBL_BTK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_btk_finished, double_macro_btk_reset),
@@ -90,13 +92,14 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define XX_UND TD(TD_DBL_UND)
 #define XX_BRK TD(TD_DBL_BRK)
 #define XX_CRL TD(TD_DBL_CRL)
+#define XX_SQO TD(TD_DBL_SQO)
 #define XX_BTK TD(TD_DBL_BTK)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_5x15(
   XX_BTK,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,  /**/ KC_MINS, KC_EQL,  KC_BSPC, \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, /**/ KC_7,    KC_8,    KC_9,    \
-  XX_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, /**/ KC_4,    KC_5,    KC_6,    \
+  XX_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, XX_SQO,  /**/ KC_4,    KC_5,    KC_6,    \
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, XX_ENT,  /**/ KC_1,    KC_2,    KC_3,    \
   MO(4),   XX_CTL,  XX_OPT,  XX_CMD,  LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, /**/ KC_0,    KC_PGDN, KC_PGUP  \
 ),

@@ -74,7 +74,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 #define TD_MACRO_DOUBLE(name, key, macro)                                             \
   void double_macro_##name##_finished(qk_tap_dance_state_t *state, void *user_data) { \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) register_code(KC_LSHIFT);                             \
+      if (key & QK_LSFT) register_code(KC_LSHIFT);                                    \
       register_code((uint8_t)key);                                                    \
     } else {                                                                          \
       SEND_STRING(macro);                                                             \
@@ -83,7 +83,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
   }                                                                                   \
   void double_macro_##name##_reset(qk_tap_dance_state_t *state, void *user_data) {    \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                           \
+      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                                  \
       unregister_code((uint8_t)key);                                                  \
     }                                                                                 \
   }
@@ -91,13 +91,14 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 TD_MACRO_DOUBLE(par, KC_LEFT_PAREN, "()"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(brk, KC_LBRACKET, "[]"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(crl, KC_LEFT_CURLY_BRACE, "{}"SS_TAP(X_LEFT))
+TD_MACRO_DOUBLE(sqo, KC_QUOTE, "''"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(und, KC_UNDERSCORE, "__"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(str, KC_ASTERISK, "**"SS_TAP(X_LEFT))
 TD_MACRO_DOUBLE(btk, KC_GRAVE, "``"SS_TAP(X_LEFT))
 
 //Tap dance Actions
 
-enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DOUBLE_PAR, TD_DOUBLE_BRK, TD_DOUBLE_CRL, TD_DOUBLE_UND, TD_DOUBLE_STR, TD_DOUBLE_BTK };
+enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DOUBLE_PAR, TD_DOUBLE_BRK, TD_DOUBLE_CRL, TD_DOUBLE_SQO, TD_DOUBLE_UND, TD_DOUBLE_STR, TD_DOUBLE_BTK };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_cmd_finished, chord_esc_cmd_reset),
@@ -106,6 +107,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_DOUBLE_PAR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_par_finished, double_macro_par_reset),
     [TD_DOUBLE_BRK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_brk_finished, double_macro_brk_reset),
     [TD_DOUBLE_CRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_crl_finished, double_macro_crl_reset),
+    [TD_DOUBLE_SQO] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_sqo_finished, double_macro_sqo_reset),
     [TD_DOUBLE_UND] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_und_finished, double_macro_und_reset),
     [TD_DOUBLE_STR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_str_finished, double_macro_str_reset),
     [TD_DOUBLE_BTK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_btk_finished, double_macro_btk_reset),
@@ -114,7 +116,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_planck_grid(
       KC_TAB,KC_Q,KC_W,KC_E,KC_R,KC_T,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_BSPACE,
-      LCTL_T(KC_ESCAPE),KC_A,KC_S,KC_D,KC_F,KC_G,KC_H,KC_J,KC_K,KC_L,KC_SCOLON,KC_QUOTE,
+      LCTL_T(KC_ESCAPE),KC_A,KC_S,KC_D,KC_F,KC_G,KC_H,KC_J,KC_K,KC_L,KC_SCOLON,TD(TD_DOUBLE_SQO),
       KC_LSHIFT,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_N,KC_M,KC_COMMA,KC_DOT,KC_SLASH,RSFT_T(KC_ENTER),
       MO(4),TD(TD_CTR_ESC),TD(TD_OPT_ESC),TD(TD_CMD_ESC),LOWER,KC_SPACE,KC_SPACE,RAISE,KC_LEFT,KC_DOWN,KC_UP,KC_RIGHT
   ),
