@@ -2,46 +2,17 @@
 #ifdef AUDIO_ENABLE
 #include "muse.h"
 #endif
-#include "eeprom.h"
-#include "keymap_german.h"
-#include "keymap_nordic.h"
-#include "keymap_french.h"
-#include "keymap_spanish.h"
-#include "keymap_hungarian.h"
-#include "keymap_swedish.h"
-#include "keymap_br_abnt2.h"
-#include "keymap_canadian_multilingual.h"
-#include "keymap_german_ch.h"
-#include "keymap_jp.h"
 
-#define KC_MAC_UNDO LGUI(KC_Z)
-#define KC_MAC_CUT LGUI(KC_X)
-#define KC_MAC_COPY LGUI(KC_C)
-#define KC_MAC_PASTE LGUI(KC_V)
-#define KC_PC_UNDO LCTL(KC_Z)
-#define KC_PC_CUT LCTL(KC_X)
-#define KC_PC_COPY LCTL(KC_C)
-#define KC_PC_PASTE LCTL(KC_V)
-#define ES_LESS_MAC KC_GRAVE
-#define ES_GRTR_MAC LSFT(KC_GRAVE)
-#define ES_BSLS_MAC ALGR(KC_6)
-
-
-enum planck_layers {
-  _BASE,
+enum altered_layers {
+  _QWERTY,
   _LOWER,
   _RAISE,
   _ADJUST,
   _LAYER4,
 };
 
-enum planck_keycodes {
+enum altered_keycodes {
   QWERTY = SAFE_RANGE,
-  COLEMAK,
-  DVORAK,
-  PLOVER,
-  BACKLIT,
-  EXT_PLV
 };
 
 #define LOWER MO(_LOWER)
@@ -97,54 +68,65 @@ TD_MACRO_DOUBLE(btk, KC_GRAVE, "``"SS_TAP(X_LEFT))
 
 //Tap dance Actions
 
-enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DOUBLE_PAR, TD_DOUBLE_BRK, TD_DOUBLE_CRL, TD_DOUBLE_UND, TD_DOUBLE_STR, TD_DOUBLE_BTK };
+enum { TD_CMD_ESC = 0, TD_OPT_ESC, TD_CTR_ESC, TD_DBL_PAR, TD_DBL_BRK, TD_DBL_CRL, TD_DBL_UND, TD_DBL_STR, TD_DBL_BTK };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CMD_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_cmd_finished, chord_esc_cmd_reset),
     [TD_OPT_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_opt_finished, chord_esc_opt_reset),
     [TD_CTR_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, chord_esc_ctrl_finished, chord_esc_ctrl_reset),
-    [TD_DOUBLE_PAR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_par_finished, double_macro_par_reset),
-    [TD_DOUBLE_BRK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_brk_finished, double_macro_brk_reset),
-    [TD_DOUBLE_CRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_crl_finished, double_macro_crl_reset),
-    [TD_DOUBLE_UND] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_und_finished, double_macro_und_reset),
-    [TD_DOUBLE_STR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_str_finished, double_macro_str_reset),
-    [TD_DOUBLE_BTK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_btk_finished, double_macro_btk_reset),
+    [TD_DBL_PAR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_par_finished, double_macro_par_reset),
+    [TD_DBL_BRK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_brk_finished, double_macro_brk_reset),
+    [TD_DBL_CRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_crl_finished, double_macro_crl_reset),
+    [TD_DBL_UND] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_und_finished, double_macro_und_reset),
+    [TD_DBL_STR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_str_finished, double_macro_str_reset),
+    [TD_DBL_BTK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, double_macro_btk_finished, double_macro_btk_reset),
 };
 
+#define XX_ESC LCTL_T(KC_ESCAPE)
+#define XX_ENT RSFT_T(KC_ENTER)
+#define XX_CTL TD(TD_CTR_ESC)
+#define XX_OPT TD(TD_OPT_ESC)
+#define XX_CMD TD(TD_CMD_ESC)
+#define XX_STR TD(TD_DBL_STR)
+#define XX_PAR TD(TD_DBL_PAR)
+#define XX_UND TD(TD_DBL_UND)
+#define XX_BRK TD(TD_DBL_BRK)
+#define XX_CRL TD(TD_DBL_CRL)
+#define XX_BTK TD(TD_DBL_BTK)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_BASE] = LAYOUT_planck_grid(
-      KC_TAB,KC_Q,KC_W,KC_E,KC_R,KC_T,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_BSPACE,
-      LCTL_T(KC_ESCAPE),KC_A,KC_S,KC_D,KC_F,KC_G,KC_H,KC_J,KC_K,KC_L,KC_SCOLON,KC_QUOTE,
-      KC_LSHIFT,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_N,KC_M,KC_COMMA,KC_DOT,KC_SLASH,RSFT_T(KC_ENTER),
-      MO(4),TD(TD_CTR_ESC),TD(TD_OPT_ESC),TD(TD_CMD_ESC),LOWER,KC_SPACE,KC_SPACE,RAISE,KC_LEFT,KC_DOWN,KC_UP,KC_RIGHT
-  ),
+[_QWERTY] = LAYOUT_planck_grid( \
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  XX_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, XX_ENT,  \
+  MO(4),   XX_CTL,  XX_OPT,  XX_CMD,  LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+),
 
-  [_LOWER] = LAYOUT_planck_grid(
-      TD(TD_DOUBLE_BTK),KC_1,KC_2,KC_3,KC_4,KC_5,KC_6,KC_7,KC_8,KC_9,KC_0,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,KC_MINUS,KC_EQUAL,TD(TD_DOUBLE_BRK),KC_RBRACKET,KC_BSLASH,KC_TRANSPARENT,
-      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_HOME,KC_PGDOWN,KC_PGUP,KC_END
-  ),
+[_LOWER] = LAYOUT_planck_grid( \
+  XX_BTK,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  XX_BRK,  KC_RBRC, KC_BSLS, \
+  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
+),
+[_RAISE] = LAYOUT_planck_grid( \
+  KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, XX_STR,  XX_PAR,  KC_RPRN, _______, \
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   XX_UND,  KC_PLUS, XX_CRL,  KC_RCBR, KC_PIPE, \
+  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, KC_HOME, KC_END,  _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY  \
+),
 
-  [_RAISE] = LAYOUT_planck_grid(
-      KC_TILD,KC_EXLM,KC_AT,KC_HASH,KC_DLR,KC_PERC,KC_CIRC,KC_AMPR,TD(TD_DOUBLE_STR),TD(TD_DOUBLE_PAR),KC_RPRN,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,TD(TD_DOUBLE_UND),KC_PLUS,TD(TD_DOUBLE_CRL),KC_RCBR,KC_PIPE,KC_TRANSPARENT,
-      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_NONUS_HASH,KC_NONUS_BSLASH,KC_LBRACKET,KC_RBRACKET,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_MEDIA_NEXT_TRACK,KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_MEDIA_PLAY_PAUSE
-  ),
-
-  [_ADJUST] = LAYOUT_planck_grid(
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,AU_ON,AU_OFF,AU_TOG,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,RESET,
-      KC_TRANSPARENT,KC_TRANSPARENT,MU_ON,MU_OFF,MU_TOG,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT
+[_ADJUST] = LAYOUT_planck_grid( \
+  _______, RESET,   DEBUG,   _______, _______, _______, _______, TERM_ON, TERM_OFF,_______, _______, _______, \
+  _______, _______, AU_ON,   AU_OFF,  AU_TOG,  _______, _______, _______, _______, _______, _______, RESET,   \
+  _______, _______, MU_ON,   MU_OFF,  MU_TOG,  _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
   ),
 
   [_LAYER4] = LAYOUT_planck_grid(
-      LGUI(KC_GRAVE),LGUI(KC_1),LGUI(KC_2),LGUI(KC_3),LGUI(KC_4),LGUI(KC_5),LGUI(KC_6),LGUI(KC_7),LGUI(KC_8),KC_LPRN,KC_RPRN,KC_DELETE,KC_TRANSPARENT,
-      KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,KC_MINUS,KC_EQUAL,KC_LBRACKET,KC_RBRACKET,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_UNDS,KC_PLUS,KC_LCBR,KC_RCBR,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT
+      LGUI(KC_GRAVE),LGUI(KC_1),LGUI(KC_2),LGUI(KC_3),LGUI(KC_4),LGUI(KC_5),LGUI(KC_6),LGUI(KC_7),LGUI(KC_8),KC_LPRN,KC_RPRN,KC_DELETE,_______,
+      KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,KC_MINUS,KC_EQUAL,KC_LBRACKET,KC_RBRACKET,_______,_______,
+      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_UNDS,KC_PLUS,KC_LCBR,KC_RCBR,_______,_______,
+      _______,_______,_______,_______,_______,KC_NO,_______,_______,_______,_______,_______
   ),
 };
 
