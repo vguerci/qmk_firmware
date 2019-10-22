@@ -74,7 +74,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 #define TD_MACRO_DOUBLE(name, key, macro)                                             \
   void double_macro_##name##_finished(qk_tap_dance_state_t *state, void *user_data) { \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) register_code(KC_LSHIFT);                             \
+      if (key & QK_LSFT) register_code(KC_LSHIFT);                                    \
       register_code((uint8_t)key);                                                    \
     } else {                                                                          \
       SEND_STRING(macro);                                                             \
@@ -83,7 +83,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
   }                                                                                   \
   void double_macro_##name##_reset(qk_tap_dance_state_t *state, void *user_data) {    \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                           \
+      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                                  \
       unregister_code((uint8_t)key);                                                  \
     }                                                                                 \
   }
@@ -119,18 +119,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       MO(4),TD(TD_CTR_ESC),TD(TD_OPT_ESC),TD(TD_CMD_ESC),LOWER,KC_SPACE,KC_SPACE,RAISE,KC_LEFT,KC_DOWN,KC_UP,KC_RIGHT
   ),
 
-  [_RAISE] = LAYOUT_planck_grid(
-      KC_TILD,KC_EXLM,KC_AT,KC_HASH,KC_DLR,KC_PERC,KC_CIRC,KC_AMPR,TD(TD_DOUBLE_STR),TD(TD_DOUBLE_PAR),KC_RPRN,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,TD(TD_DOUBLE_UND),KC_PLUS,TD(TD_DOUBLE_CRL),KC_RCBR,KC_PIPE,KC_TRANSPARENT,
-      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_NONUS_HASH,KC_NONUS_BSLASH,KC_LBRACKET,KC_RBRACKET,KC_TRANSPARENT,KC_TRANSPARENT,
-      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_MEDIA_NEXT_TRACK,KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_MEDIA_PLAY_PAUSE
-  ),
-
   [_LOWER] = LAYOUT_planck_grid(
       TD(TD_DOUBLE_BTK),KC_1,KC_2,KC_3,KC_4,KC_5,KC_6,KC_7,KC_8,KC_9,KC_0,KC_TRANSPARENT,
       KC_TRANSPARENT,KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,KC_MINUS,KC_EQUAL,TD(TD_DOUBLE_BRK),KC_RBRACKET,KC_BSLASH,KC_TRANSPARENT,
       KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,
       KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_HOME,KC_PGDOWN,KC_PGUP,KC_END
+  ),
+
+  [_RAISE] = LAYOUT_planck_grid(
+      KC_TILD,KC_EXLM,KC_AT,KC_HASH,KC_DLR,KC_PERC,KC_CIRC,KC_AMPR,TD(TD_DOUBLE_STR),TD(TD_DOUBLE_PAR),KC_RPRN,KC_TRANSPARENT,KC_TRANSPARENT,
+      KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,TD(TD_DOUBLE_UND),KC_PLUS,TD(TD_DOUBLE_CRL),KC_RCBR,KC_PIPE,KC_TRANSPARENT,
+      KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_NONUS_HASH,KC_NONUS_BSLASH,KC_LBRACKET,KC_RBRACKET,KC_TRANSPARENT,KC_TRANSPARENT,
+      KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_TRANSPARENT,KC_NO,KC_TRANSPARENT,KC_MEDIA_NEXT_TRACK,KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_MEDIA_PLAY_PAUSE
   ),
 
   [_ADJUST] = LAYOUT_planck_grid(

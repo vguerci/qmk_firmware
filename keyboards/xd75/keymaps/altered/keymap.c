@@ -43,7 +43,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
 #define TD_MACRO_DOUBLE(name, key, macro)                                             \
   void double_macro_##name##_finished(qk_tap_dance_state_t *state, void *user_data) { \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) register_code(KC_LSHIFT);                             \
+      if (key & QK_LSFT) register_code(KC_LSHIFT);                                    \
       register_code((uint8_t)key);                                                    \
     } else {                                                                          \
       SEND_STRING(macro);                                                             \
@@ -52,7 +52,7 @@ TD_CHORD_ESC(ctrl, KC_LCTRL)
   }                                                                                   \
   void double_macro_##name##_reset(qk_tap_dance_state_t *state, void *user_data) {    \
     if (state->count == 1) {                                                          \
-      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                           \
+      if (key & QK_LSFT) unregister_code(KC_LSHIFT);                                  \
       unregister_code((uint8_t)key);                                                  \
     }                                                                                 \
   }
