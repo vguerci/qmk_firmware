@@ -2,10 +2,6 @@
 
 #ifdef AUDIO_ENABLE
 #define STARTUP_SONG SONG(PLANCK_SOUND)
-
-#define MIDI_BASIC
-
-#define ENCODER_RESOLUTION 4
 #endif
 
 /*
@@ -15,4 +11,6 @@
 #define ORYX_CONFIGURATOR
 #define NO_AUTO_SHIFT_ALPHA
 
+// Most tactile encoders have detents every 4 stages
+#define ENCODER_RESOLUTION 4
 #define TAPPING_TERM 200
