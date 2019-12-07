@@ -11,3 +11,11 @@ enum altered_layers {
   _ADJUST,
 };
 
+enum altered_keycodes {
+  QWERTY = SAFE_RANGE,
+  LOWER,
+  RAISE,
+  ADJUST,
+  BACKLIT,
+  RGBRST
+};

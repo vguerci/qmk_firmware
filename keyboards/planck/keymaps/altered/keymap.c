@@ -1,10 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "altered.h"
 
-enum altered_keycodes {
-  QWERTY = SAFE_RANGE,
-};
-
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
