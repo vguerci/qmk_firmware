@@ -68,8 +68,8 @@ enum {
 
 int quad_dance (qk_tap_dance_state_t *state) {
   if (state->count == 1) {
-    if (state->interrupted || !state->pressed)  return SINGLE_TAP;
-    //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+    if (!state->pressed) return SINGLE_TAP;
+    // key is still held. Means you want to send a 'HOLD'.
     else return SINGLE_HOLD;
   }
   else if (state->count == 2) {
