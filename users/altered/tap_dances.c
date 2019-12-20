@@ -1,4 +1,5 @@
 #include "tap_dances.h"
+#include <print.h>
 
 //Macros
 
@@ -99,6 +100,9 @@ static tap esc_tap_state = {
 
 void quad_esc_ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
   esc_tap_state.state = quad_dance(state);
+#ifdef CONSOLE_ENABLE
+  uprintf("quad_dance: count: %u, interrupted: %u, pressed: %u, pressed: %u >> state: %u\n", state->count, state->interrupted, state->pressed, state->finished, esc_tap_state.state);
+#endif
   switch (esc_tap_state.state) {
     case SINGLE_TAP: register_code(KC_ESC); break;
     case SINGLE_HOLD: register_code(KC_LCTRL); break;
