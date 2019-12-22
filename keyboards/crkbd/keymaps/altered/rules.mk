@@ -8,7 +8,8 @@ MOUSEKEY_ENABLE = no
 AUTO_SHIFT_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 EXTRAKEY_ENABLE = yes
-# CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = no # DEBUG
+OLED_DRIVER_ENABLE = yes
 
 # If you want to change the display of OLED, you need to change here
 SRC +=  ./lib/glcdfont.c \

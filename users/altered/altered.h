@@ -1,5 +1,6 @@
 #pragma once
 
+#include <print.h>
 #include "quantum.h"
 #include "tap_dances.h"
 
