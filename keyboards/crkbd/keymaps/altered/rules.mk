@@ -1,4 +1,4 @@
-# BOOTLOADER = atmel-dfu
+# BOOTLOADER = atmel-dfu # for Elite C
 
 # RGBLIGHT_ENABLE = yes
 RGBLIGHT_ENABLE = no
