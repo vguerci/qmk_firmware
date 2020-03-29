@@ -1,4 +1,6 @@
-# BOOTLOADER = atmel-dfu # for Elite C
+BOOTLOADER = caterina # Pro micro
+# BOOTLOADER = atmel-dfu # Elite C
+# BOOTLOADER = qmk-dfu # ShiroMicro
 
 # RGBLIGHT_ENABLE = yes
 RGBLIGHT_ENABLE = no
