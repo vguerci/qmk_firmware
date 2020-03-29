@@ -9,6 +9,13 @@ extern rgblight_config_t rgblight_config;
 #define XX_F1 LCTL_T(KC_F1)
 #define XX_F7 LSFT_T(KC_F7)
 
+#define CG_F1 C(G(KC_F1))
+#define CG_F2 C(G(KC_F2))
+#define CG_F3 C(G(KC_F3))
+#define CG_F4 C(G(KC_F4))
+#define CG_F5 C(G(KC_F5))
+#define CG_F6 C(G(KC_F6))
+
 extern uint8_t is_master;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -51,11 +58,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        RESET,  RGBRST, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,\
+        RESET,  RGBRST, _______, _______, _______, _______,                       KC_F13,  KC_F14, KC_BRID, KC_BRIU,  KC_F15,  KC_F16,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, _______, _______,                      _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY, _______,\
+      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, _______, _______,                      _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, _______, _______,                      _______, _______, _______, _______, _______, _______,\
+      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, _______, _______,                        CG_F1,   CG_F2,   CG_F3,   CG_F4,   CG_F5,   CG_F6,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______\
                                       //`--------------------------'  `--------------------------'
