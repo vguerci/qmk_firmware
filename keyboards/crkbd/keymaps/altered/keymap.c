@@ -91,7 +91,10 @@ void matrix_init_user(void) {
     #endif
     //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
     #ifdef SSD1306OLED
-        iota_gfx_init(!has_usb());   // turns on the display
+      #ifdef SSD1306OLED_SLOW
+        wait_ms(2000);
+      #endif
+      iota_gfx_init(!has_usb()); // turns on the display
     #endif
 }
 
@@ -211,8 +214,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void keyboard_post_init_user(void) {
-  wait_ms(2000);
-  oled_init(OLED_ROTATION_0);
   /* DEBUG Customise these values to desired behaviour
   debug_enable=true;
   debug_matrix=true;
