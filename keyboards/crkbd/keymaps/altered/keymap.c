@@ -6,6 +6,18 @@
 extern rgblight_config_t rgblight_config;
 #endif
 
+#ifdef RGB_MATRIX_ENABLE
+  #include "rgb_matrix_types.h"
+  #include "lib/lib8tion/lib8tion.h"
+
+  typedef enum rgb_fade_states { ENABLED, FADEOUT, DISABLED, FADEIN } rgb_fade_states;
+  static rgb_fade_states rgb_fade_state = ENABLED;
+
+  rgb_config_t user_rgb_enabled_config;
+  rgb_config_t user_rgb_fadein_config;
+  static uint32_t user_rgb_fadein_timer = 0;
+#endif
+
 #define XX_F1 LCTL_T(KC_F1)
 #define XX_F7 LSFT_T(KC_F7)
 
@@ -98,6 +110,64 @@ void matrix_init_user(void) {
     #endif
 }
 
+void matrix_scan_user(void) {
+#ifdef SSD1306OLED
+    iota_gfx_task();
+#endif
+#ifdef RGB_MATRIX_ENABLE
+    int32_t rgb_disabled_time = g_rgb_counters.any_key_hit - RGB_MATRIX_DISABLE_TIMEOUT * 60 * 20;
+    bool    rgb_enabled       = rgb_disabled_time < 0;
+    // State change
+    switch (rgb_fade_state) {
+        case ENABLED:
+        case FADEIN:
+            if (!rgb_enabled) {
+                // uprintf("RGB FADEOUT\n");
+                user_rgb_enabled_config = rgb_matrix_config;
+                rgb_fade_state          = FADEOUT;
+            }
+            break;
+        case DISABLED:
+        case FADEOUT:
+            if (rgb_enabled) {
+                // uprintf("RGB FADEIN\n");
+                user_rgb_fadein_timer  = timer_read32();
+                user_rgb_fadein_config = rgb_matrix_config;
+                rgb_fade_state         = FADEIN;
+            }
+            break;
+    }
+    // State effect
+    switch (rgb_fade_state) {
+        case ENABLED:
+            break;
+        case FADEOUT:
+            if (rgb_matrix_config.hsv.v > 0) {
+                uint8_t dec             = (uint8_t)(rgb_disabled_time / RGB_MATRIX_DISABLE_FADEOUT);
+                rgb_matrix_config.hsv.v = qsub8(user_rgb_enabled_config.hsv.v, dec);
+            } else {
+                // uprintf("RGB DISABLED\n");
+                rgb_matrix_config.hsv.v = 0;
+                rgb_fade_state          = DISABLED;
+            }
+            break;
+        case DISABLED:
+            break;
+        case FADEIN:
+            if (rgb_matrix_config.hsv.v < user_rgb_enabled_config.hsv.v) {
+                uint8_t inc             = (uint8_t)(timer_elapsed32(user_rgb_fadein_timer) / RGB_MATRIX_DISABLE_FADEIN);
+                rgb_matrix_config.hsv.v = qadd8(user_rgb_fadein_config.hsv.v, inc);
+            }
+            if (rgb_matrix_config.hsv.v > user_rgb_enabled_config.hsv.v) {
+                // uprintf("RGB ENABLED\n");
+                rgb_matrix_config.hsv.v = user_rgb_enabled_config.hsv.v;
+                rgb_fade_state          = ENABLED;
+            }
+            break;
+    }
+#endif
+}
+
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
 #ifdef SSD1306OLED
 
@@ -112,10 +182,6 @@ const char *read_keylogs(void);
 // const char *read_host_led_state(void);
 // void set_timelog(void);
 // const char *read_timelog(void);
-
-void matrix_scan_user(void) {
-   iota_gfx_task();
-}
 
 void matrix_render_user(struct CharacterMatrix *matrix) {
   if (is_master) {
@@ -220,4 +286,7 @@ void keyboard_post_init_user(void) {
   //debug_keyboard=true;
   //debug_mouse=true;
   //*/
+#ifdef RGB_MATRIX_ENABLE
+  user_rgb_enabled_config = rgb_matrix_config;
+#endif
 }
