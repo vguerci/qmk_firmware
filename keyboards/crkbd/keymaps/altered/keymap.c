@@ -72,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
         RESET,  RGBRST, _______, _______, _______, _______,                       KC_F13,  KC_F14, KC_BRID, KC_BRIU,  KC_F15,  KC_F16,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, _______,                      _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______,\
+      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI,  RGBLYR,                      _______, KC_MPLY, KC_VOLD, KC_VOLU, KC_MNXT, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, RGB_SPD, _______,                        CG_F1,   CG_F2,   CG_F3,   CG_F4,   CG_F5,   CG_F6,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -81,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-int RGB_current_mode;
+int RGB_current_mode, RGB_current_layer;
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
@@ -108,6 +108,21 @@ void matrix_init_user(void) {
       #endif
       iota_gfx_init(!has_usb()); // turns on the display
     #endif
+}
+
+void rgb_matrix_indicators_user(void) {
+  switch (RGB_current_layer) {
+    case RGB_LYR_KEYS_ONLY:
+      for (uint8_t i = 0; i < 6; i++) {
+        rgb_matrix_set_color(i, 0x00, 0x00, 0x00);
+      }
+      break;
+    case RGB_LYR_UNDER_ONLY:
+      for (uint8_t i = 6; i < 6 + 21; i++) {
+        rgb_matrix_set_color(i, 0x00, 0x00, 0x00);
+      }
+      break;
+  }
 }
 
 void matrix_scan_user(void) {
@@ -274,6 +289,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           rgb_matrix_enable();
         }
       #endif
+      break;
+    case RGBLYR:
+      if (record->event.pressed) {
+        RGB_current_layer = (RGB_current_layer + 1) % RGB_LYR_MAX;
+        #ifdef RGB_MATRIX_ENABLE
+        if (RGB_current_layer == RGB_LYR_UNDER_ONLY &&
+            rgb_matrix_config.hsv.v == RGB_MATRIX_MAXIMUM_BRIGHTNESS) {
+            rgb_matrix_config.hsv.v = 255;
+        } else if (RGB_current_layer != RGB_LYR_UNDER_ONLY &&
+            rgb_matrix_config.hsv.v > RGB_MATRIX_MAXIMUM_BRIGHTNESS) {
+            rgb_matrix_config.hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
+        }
+        #endif
+      }
       break;
   }
   return true;

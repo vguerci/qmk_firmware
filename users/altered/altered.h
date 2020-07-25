@@ -18,5 +18,13 @@ enum altered_keycodes {
   RAISE,
   ADJUST,
   BACKLIT,
-  RGBRST
+  RGBRST,
+  RGBLYR
+};
+
+enum altered_rgb_matrix_layers {
+  RGB_LYR_ALL,
+  RGB_LYR_KEYS_ONLY,
+  RGB_LYR_UNDER_ONLY,
+  RGB_LYR_MAX
 };
