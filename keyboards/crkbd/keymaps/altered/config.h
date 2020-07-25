@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef RGB_MATRIX_ENABLE
 // Custom timeout / fadeout implementation
+#   define RGB_DISABLE_TIMEOUT 3600000 // Just to abuse its timer
 #   define RGB_MATRIX_DISABLE_TIMEOUT 20
 #   define RGB_MATRIX_DISABLE_FADEOUT (600 * 4)
 #   define RGB_MATRIX_DISABLE_FADEIN  2

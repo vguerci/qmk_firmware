@@ -132,7 +132,7 @@ static uint8_t         rgb_last_effect   = UINT8_MAX;
 static effect_params_t rgb_effect_params = {0, 0xFF};
 static rgb_task_states rgb_task_state    = SYNCING;
 #if RGB_DISABLE_TIMEOUT > 0
-static uint32_t rgb_anykey_timer;
+uint32_t rgb_anykey_timer;
 #endif  // RGB_DISABLE_TIMEOUT > 0
 
 // double buffers

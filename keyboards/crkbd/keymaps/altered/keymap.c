@@ -12,6 +12,7 @@ extern rgblight_config_t rgblight_config;
 
   typedef enum rgb_fade_states { ENABLED, FADEOUT, DISABLED, FADEIN } rgb_fade_states;
   static rgb_fade_states rgb_fade_state = ENABLED;
+  extern uint32_t rgb_anykey_timer;
 
   rgb_config_t user_rgb_enabled_config;
   rgb_config_t user_rgb_fadein_config;
@@ -130,7 +131,7 @@ void matrix_scan_user(void) {
     iota_gfx_task();
 #endif
 #ifdef RGB_MATRIX_ENABLE
-    int32_t rgb_disabled_time = g_rgb_counters.any_key_hit - RGB_MATRIX_DISABLE_TIMEOUT * 60 * 20;
+    int32_t rgb_disabled_time = rgb_anykey_timer - RGB_MATRIX_DISABLE_TIMEOUT * 60 * 20;
     bool    rgb_enabled       = rgb_disabled_time < 0;
     // State change
     switch (rgb_fade_state) {
