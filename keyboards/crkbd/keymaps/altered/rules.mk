@@ -3,7 +3,6 @@ BOOTLOADER = caterina # Pro micro
 # BOOTLOADER = qmk-dfu # ShiroMicro
 
 # RGBLIGHT_ENABLE = yes
-RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = WS2812
 
 # Reduce firmware size

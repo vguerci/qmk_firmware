@@ -111,6 +111,7 @@ void matrix_init_user(void) {
     #endif
 }
 
+#ifdef RGB_MATRIX_ENABLE
 void rgb_matrix_indicators_user(void) {
   switch (RGB_current_layer) {
     case RGB_LYR_KEYS_ONLY:
@@ -125,6 +126,7 @@ void rgb_matrix_indicators_user(void) {
       break;
   }
 }
+#endif
 
 void matrix_scan_user(void) {
 #ifdef SSD1306OLED
