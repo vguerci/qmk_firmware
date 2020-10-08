@@ -1,15 +1,14 @@
 #pragma once
 
 //#define USE_MATRIX_I2C
+#ifdef KEYBOARD_crkbd_rev1_legacy
+#    undef USE_I2C
+#    define USE_SERIAL
+#endif
 
 #define EE_HANDS
 
-#define SSD1306OLED
-#define SSD1306OLED_SLOW
-
 #define USE_SERIAL_PD2
-
-//TODO? #define TAPPING_FORCE_HOLD
 
 #ifdef RGBLIGHT_ENABLE
     #undef RGBLED_NUM
@@ -20,6 +19,8 @@
     #define RGBLIGHT_SAT_STEP 17
     #define RGBLIGHT_VAL_STEP 17
 #endif
+
+#define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 
 #ifdef RGB_MATRIX_ENABLE
 // Custom timeout / fadeout implementation
