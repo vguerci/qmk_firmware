@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EE_HANDS
 
 #define SSD1306OLED
-#define SSD1306OLED_SLOW
+// #define SSD1306OLED_SLOW
 
 #define USE_SERIAL_PD2
 
